@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
 	StyleSheet,
 	View,
-	Button,
 	Text,
 	TouchableOpacity
 } from 'react-native';
@@ -11,18 +10,47 @@ export default class App extends Component {
 
 	constructor() {
 		super()
-		this.state = {}
+		this.state = {
+			resultText: ""
+		}
+	}
+
+	calculateResult() {
+		const txt = this.state.resultText
+	}
+
+	buttonPressed(text) {
+		// console.log(text)
+
+		if (text == '=') {
+			return this.calculateResult()
+		}
+
+		this.setState({
+			resultText: this.state.resultText + text
+		})
+	}
+
+	operate(operation) {
+		switch (operation) {
+			case "DEL":
+				let txt = this.state.resultText.split('')
+				txt.pop()
+				this.setState({
+					resultText: txt.join('')
+				})
+		}
 	}
 
 	render() {
 
 		let rows = []
-		let nums = [[7, 8, 9], [4, 5, 6], [1, 2, 3], [0, ".", "="]]
+		let nums = [[7, 8, 9], [4, 5, 6], [1, 2, 3], [0, '.', '=']]
 		for (let i = 0; i < 4; i++) {
 			let row = []
 			for (let j = 0; j < 3; j++) {
 				row.push(
-					<TouchableOpacity style={styles.btn}>
+					<TouchableOpacity style={styles.btn} onPress={() => this.buttonPressed(nums[i][j])} >
 						<Text style={styles.num}>
 							{nums[i][j]}
 						</Text>
@@ -35,7 +63,7 @@ export default class App extends Component {
 		let ops = []
 		for (let i = 0; i < 5; i++) {
 			ops.push(
-				<TouchableOpacity style={styles.btn}>
+				<TouchableOpacity style={styles.btn} onPress={() => this.operate(operations[i])} >
 					<Text style={styles.op}>
 						{operations[i]}
 					</Text>
@@ -47,7 +75,7 @@ export default class App extends Component {
 			<View style={styles.container}>
 				<View style={styles.calculation}>
 					<Text style={styles.calculationText}>
-						11*11
+						{this.state.resultText}
 					</Text>
 				</View>
 				<View style={styles.result}>
