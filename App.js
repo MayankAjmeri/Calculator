@@ -4,6 +4,7 @@ import {
 	View,
 	Button,
 	Text,
+	TouchableOpacity
 } from 'react-native';
 
 export default class App extends Component {
@@ -14,6 +15,34 @@ export default class App extends Component {
 	}
 
 	render() {
+
+		let rows = []
+		let nums = [[7, 8, 9], [4, 5, 6], [1, 2, 3], [0, ".", "="]]
+		for (let i = 0; i < 4; i++) {
+			let row = []
+			for (let j = 0; j < 3; j++) {
+				row.push(
+					<TouchableOpacity style={styles.btn}>
+						<Text style={styles.num}>
+							{nums[i][j]}
+						</Text>
+					</TouchableOpacity>)
+			}
+			rows.push(<View style={styles.row}>{row}</View>)
+		}
+
+		let operations = ["DEL", "/", "*", "-", "+"]
+		let ops = []
+		for (let i = 0; i < 5; i++) {
+			ops.push(
+				<TouchableOpacity style={styles.btn}>
+					<Text style={styles.op}>
+						{operations[i]}
+					</Text>
+				</TouchableOpacity>
+			)
+		}
+
 		return (
 			<View style={styles.container}>
 				<View style={styles.calculation}>
@@ -28,33 +57,10 @@ export default class App extends Component {
 				</View>
 				<View style={styles.buttons}>
 					<View style={styles.numbers}>
-						<View style={styles.row}>
-							<Button title="7" />
-							<Button title="8" />
-							<Button title="9" />
-						</View>
-						<View style={styles.row}>
-							<Button title="4" />
-							<Button title="5" />
-							<Button title="6" />
-						</View>
-						<View style={styles.row}>
-							<Button title="1" />
-							<Button title="2" />
-							<Button title="3" />
-						</View>
-						<View style={styles.row}>
-							<Button title="." />
-							<Button title="0" />
-							<Button title="0" />
-						</View>
+						{rows}
 					</View>
 					<View style={styles.operations}>
-						<Button title="DEL" />
-						<Button title="/" />
-						<Button title="*" />
-						<Button title="-" />
-						<Button title="+" />
+						{ops}
 					</View>
 				</View>
 			</View>
@@ -98,15 +104,29 @@ const styles = StyleSheet.create({
 		flex: 3,
 		backgroundColor: '#434a3e',
 	},
+	btn: {
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+		alignSelf: "stretch",
+	},
+	num: {
+		color: "white",
+		fontSize: 25
+	},
+	op: {
+		color: "white",
+		fontSize: 21
+	},
 	row: {
 		flex: 1,
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "space-around"
+		justifyContent: "space-evenly"
 	},
 	operations: {
 		flex: 1,
-		backgroundColor: '#7a8771',
+		backgroundColor: '#92a294',
 		alignItems: 'center',
 		justifyContent: "space-evenly"
 	},
