@@ -11,12 +11,17 @@ export default class App extends Component {
 	constructor() {
 		super()
 		this.state = {
+			calculationText: "",
 			resultText: ""
 		}
+		this.operations = ["DEL", "/", "*", "-", "+"]
 	}
 
 	calculateResult() {
-		const txt = this.state.resultText
+		const txt = this.state.calculationText
+		this.setState({
+			resultText: eval(txt)
+		})
 	}
 
 	buttonPressed(text) {
@@ -27,17 +32,29 @@ export default class App extends Component {
 		}
 
 		this.setState({
-			resultText: this.state.resultText + text
+			calculationText: this.state.calculationText + text
 		})
 	}
 
 	operate(operation) {
 		switch (operation) {
 			case "DEL":
-				let txt = this.state.resultText.split('')
+				let txt = this.state.calculationText.split('')
 				txt.pop()
 				this.setState({
-					resultText: txt.join('')
+					calculationText: txt.join('')
+				})
+				break
+			case "/":
+			case "*":
+			case "-":
+			case "+":
+				const lastchar = this.state.calculationText.split('').pop()
+				if (this.operations.indexOf(lastchar) > 0) return
+				if (this.state.text == "")
+					return
+				this.setState({
+					calculationText: this.state.calculationText + operation
 				})
 		}
 	}
@@ -59,13 +76,12 @@ export default class App extends Component {
 			rows.push(<View style={styles.row}>{row}</View>)
 		}
 
-		let operations = ["DEL", "/", "*", "-", "+"]
 		let ops = []
 		for (let i = 0; i < 5; i++) {
 			ops.push(
-				<TouchableOpacity style={styles.btn} onPress={() => this.operate(operations[i])} >
+				<TouchableOpacity style={styles.btn} onPress={() => this.operate(this.operations[i])} >
 					<Text style={styles.op}>
-						{operations[i]}
+						{this.operations[i]}
 					</Text>
 				</TouchableOpacity>
 			)
@@ -75,13 +91,13 @@ export default class App extends Component {
 			<View style={styles.container}>
 				<View style={styles.calculation}>
 					<Text style={styles.calculationText}>
-						{this.state.resultText}
+						{this.state.calculationText}
 					</Text>
 				</View>
 				<View style={styles.result}>
 					<Text style={styles.resultText}>
-						121
-				</Text>
+						{this.state.resultText}
+					</Text>
 				</View>
 				<View style={styles.buttons}>
 					<View style={styles.numbers}>
