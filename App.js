@@ -3,7 +3,7 @@ import {
 	StyleSheet,
 	View,
 	Text,
-	TouchableOpacity
+	TouchableOpacity,
 } from 'react-native';
 
 export default class App extends Component {
@@ -24,11 +24,23 @@ export default class App extends Component {
 		})
 	}
 
+	validate() {
+		const txt = this.state.calculationText
+		switch (txt.slice(-1)) {
+			case "/":
+			case "*":
+			case "-":
+			case "+":
+				return false
+		}
+		return true
+	}
+
 	buttonPressed(text) {
 		// console.log(text)
 
 		if (text == '=') {
-			return this.calculateResult()
+			return this.validate() && this.calculateResult()
 		}
 
 		this.setState({
@@ -67,19 +79,19 @@ export default class App extends Component {
 			let row = []
 			for (let j = 0; j < 3; j++) {
 				row.push(
-					<TouchableOpacity style={styles.btn} onPress={() => this.buttonPressed(nums[i][j])} >
+					<TouchableOpacity key={nums[i][j]} style={styles.btn} onPress={() => this.buttonPressed(nums[i][j])} >
 						<Text style={styles.num}>
 							{nums[i][j]}
 						</Text>
 					</TouchableOpacity>)
 			}
-			rows.push(<View style={styles.row}>{row}</View>)
+			rows.push(<View key={i} style={styles.row}>{row}</View>)
 		}
 
 		let ops = []
 		for (let i = 0; i < 5; i++) {
 			ops.push(
-				<TouchableOpacity style={styles.btn} onPress={() => this.operate(this.operations[i])} >
+				<TouchableOpacity key={this.operations[i]} style={styles.btn} onPress={() => this.operate(this.operations[i])} >
 					<Text style={styles.op}>
 						{this.operations[i]}
 					</Text>
@@ -123,22 +135,22 @@ const styles = StyleSheet.create({
 		alignItems: "flex-end",
 	},
 	calculationText: {
-		fontSize: 40,
+		fontSize: 45,
 		textAlignVertical: "center",
-		padding: 15,
+		padding: 20,
 		// alignSelf: "flex-end",
 	},
 	result: {
 		flex: 1.2,
-		backgroundColor: 'green',
+		backgroundColor: 'white',
 		justifyContent: "center",
 		alignItems: "flex-end",
 	},
 	resultText: {
-		fontSize: 30,
+		fontSize: 40,
 		textAlignVertical: "center",
 		alignSelf: "flex-end",
-		padding: 15,
+		padding: 20,
 	},
 	buttons: {
 		flex: 6,
@@ -146,7 +158,7 @@ const styles = StyleSheet.create({
 	},
 	numbers: {
 		flex: 3,
-		backgroundColor: '#434a3e',
+		backgroundColor: '#434343',
 	},
 	btn: {
 		flex: 1,
@@ -156,7 +168,7 @@ const styles = StyleSheet.create({
 	},
 	num: {
 		color: "white",
-		fontSize: 25
+		fontSize: 30
 	},
 	op: {
 		color: "white",
@@ -170,8 +182,14 @@ const styles = StyleSheet.create({
 	},
 	operations: {
 		flex: 1,
-		backgroundColor: '#92a294',
+		backgroundColor: '#636363',
 		alignItems: 'center',
 		justifyContent: "space-evenly"
 	},
+	// onActionSelected: function(position) {
+	// 	if (position === 0) { // index of 'Settings'
+	// 	  showSettings();
+	// 	}
+	//   }
+
 });  
